@@ -1,0 +1,105 @@
+NOTE: this is the function you might want to use as a starting point once you want to 
+    average/extrapolate the line segments you detect to map out the full
+    extent of the lane (going from the result shown in raw-lines-example.mp4
+    to that shown in P1_example.mp4).  
+    
+    Think about things like separating line segments by their 
+    slope ((y2-y1)/(x2-x1)) to decide which segments are part of the left
+    line vs. the right line.  Then, you can average the position of each of 
+    the lines and extrapolate to the top and bottom of the lane.
+    
+    This function draws `lines` with `color` and `thickness`.    
+    Lines are drawn on the image inplace (mutates the image).
+    If you want to make the lines semi-transparent, think about combining
+    this function with the weighted_img() function below
+
+
+# grayscaling the image
+gray = grayscale(test_image1)
+print('This grayscale image is:', type(gray), 'with dimensions:', gray.shape)
+plt.imshow(gray ,cmap='gray')
+
+# then we apply canny edges to detect the image edges
+low_threshold = 50
+high_threshold = 150
+canny_edges = canny(gray, low_threshold, high_threshold)
+print('This Canny image is:', type(gray), 'with dimensions:', canny_edges.shape)
+plt.imshow(canny_edges, cmap='gray')
+
+# then we apply Gaussian Blur to denoice the Gray image before getting canny edges 
+denoised_gray = gaussian_blur(gray,5)
+canny_edges = canny(denoised_gray, low_threshold, high_threshold)
+print('This Canny image is:', type(gray), 'with dimensions:', canny_edges.shape)
+plt.imshow(canny_edges, cmap='gray')
+
+mask = np.zeros_like(canny_edges)   
+ignore_mask_color = 255   
+
+# four sided polygon to mask
+imshape = test_image1.shape
+xsize = imshape[1]
+ysize = imshape[0]
+# Top-Left, Top-right, Bottom-right, Bottom-left 
+vertices = np.array([[(25, ysize)
+                      , ((xsize/2) - 50, (ysize/2) + 50)  # the top left vertix
+                      , ((xsize/2) + 50, (ysize/2) + 50) # the top right vetrix
+                      , (xsize - 25, ysize)]]
+                    , dtype=np.int32)
+masked_edges = region_of_interest(canny_edges, vertices)
+print('dimensions:', canny_edges.shape)
+plt.imshow(masked_edges, cmap='gray')
+
+
+# Apply Hough transform on the Canny edged image
+rho = 2 # distance resolution in pixels of the Hough grid
+theta = 1* (np.pi/180) # angular resolution in radians of the Hough grid
+threshold = 70     # minimum number of votes (intersections in Hough grid cell)
+min_line_len = 60 #minimum number of pixels making up a line
+max_line_gap = 35    # maximum gap in pixels between connectable line segments
+
+line_image = hough_lines(masked_edges, rho, theta, threshold, min_line_len, max_line_gap)
+
+plt.imshow(line_image)
+
+
+line_edges = weighted_img(line_image, test_image1)
+plt.imshow(line_edges)
+
+
+Its apperant that Right lane lines have positive slope and left 
+lane lines have negative slope because the Y axis is inverted in 
+the open CV image, so the new method will average all
+the postitive slopes and all the negative slopes togther then draw
+the lines with the new averaged slopes and the region of intrest 
+coordinates 
+
+[[[506 322 654 404]] 0.554 Right
+
+ [[506 323 877 538]] 0.580 Right
+
+ [[506 321 898 538]] 0.554 Right
+
+ [[280 460 347 410]] -0.746 Left
+
+ [[292 462 439 339]] -0.837 Left
+
+ [[498 320 876 538]] 0.577 Right
+
+ [[348 410 469 322]]] -0.727 left
+
+(array([  -0.78874788,  686.65145647]), array([  0.5622257 ,  37.27067999]))
+(array([  0.56239556,  37.20224058]), array([  -0.78723858,  685.94793   ]))
+
+average result:  (((888, 540), (501, 320)), ((184, 540), (466, 320)))
+seperate result: (((181, 540), (466, 320)), ((890, 540), (501, 320)))
+
+solid white right:
+https://youtu.be/kV6LGD-cY3I
+
+solid yellow left:
+https://youtu.be/iUBEwLEFOYI
+
+challenge:
+https://youtu.be/MwuveIP4Lpc
+
+
