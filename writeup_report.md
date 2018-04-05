@@ -20,7 +20,7 @@
 
 Throughout the course of the project I will be showing the transformations on this set of test images:
 
-![All Test Images](test_images_output\all_test_images.png raw=true)
+![All Test Images](test_images_output\all_test_images.png?raw=true)
 
 I went ahead and borrowed *four* images form the challenge video to include it in the test images as seen in the last four images. I did that cause I wanted to test on images that have more noise like shade and different lighting.
 
