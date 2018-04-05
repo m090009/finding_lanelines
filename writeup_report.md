@@ -11,12 +11,12 @@
 ## 1. The Pipeline
 
 #### The Pipeline consists of:
-* [Color Selection](#"Color Selection")
-* [Gray scaling and Smoothing the Image](#Grayscaling and Smoothing the Image)
-* [Canny Edge Detection](#Canny Edge Detection)
-* [Region of interest](#Region of interest)
-* [Hough Transform](#Hough Transform)
-* [Extrapolating Lane lines](#Extrapolating Lane lines)
+* [Color Selection](#color-selection)
+* [Gray Scaling and Smooting](#gray-scaling-and-smoothing)
+* [Canny Edge Detection](#canny-edge-detection)
+* [Region of interest](#region-of-interest)
+* [Hough Transform](#hough-transform)
+* [Extrapolating Lane lines](#extrapolating-lane-lines)
 
 Throughout the course of the project I will be showing the transformations on this set of test images:
 
@@ -60,7 +60,7 @@ Then I used a white/yellow mask to isolate the white and yellow colors in the im
 ![white/yellow filtered test images](test_images_output/white_yellow_filtered_hsl_images.png "filtered HSL")
 
 
-## Gray Scaling and Smooting
+## Gray Scaling and Smoothing
 ---
 After that I applies **grayscaling** on the images as shown here: 
 
@@ -123,18 +123,19 @@ I altered the `hough_lines` to return a list of lines along with the image with 
 
 After finding the lane lines and drawing them I extrapolated (extended) the lane lines to have two continues lane lines from the bottom of the image (the car's body) and towards the horizon (60% of the image). I achieve this by:
 
-* [Averaging LaneLines](#Averaging LaneLines)
-* [Making Lines to Draw](#Making Lines to Draw)
-* [Drawing the Lane Lines](#Drawing the Lane Lines)
+* [Averaging LaneLines](#averaging-lanelines)
+* [Making Lines to Draw](#making-lines-to-draw)
+* [Drawing the Lane Lines](#drawing-the-lane-lines)
 
 
 #### Averaging LaneLines
 
 I wrote a method `average_slope_yintercept` that returns two lane lines (slope, y-intercept) by dividing our lane lines as left and right using their slopes *negative* slope means *left lane* and *positive* means *right lane* (inversed), then I averaged each lane line *slopes* and *y-intercepts* to get a single line for each lane. Also I used each *line length* as a *weight* to give more consideration to lines that are *longer* in length. 
 
-#### Making Line to Draw 
+#### Making Lines to Draw 
 
-Then I made lines for the averaged lane lines from their **slopes** and **y-intercepts** using the straight line equation `y = mx + b`
+Then I made lines for the averaged lane lines from their **slopes** and **y-intercepts** using the 
+straight line equation `y = mx + b`
 
 #### Drawing the Lane Lines
 
