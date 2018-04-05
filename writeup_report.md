@@ -20,7 +20,7 @@
 
 Throughout the course of the project I will be showing the transformations on this set of test images:
 
-![All Test Images](test_images_output\all_test_images.png?raw=true)
+![All Test Images](test_images_output/all_test_images.png?raw=true)
 
 I went ahead and borrowed *four* images form the challenge video to include it in the test images as seen in the last four images. I did that cause I wanted to test on images that have more noise like shade and different lighting.
 
@@ -32,7 +32,7 @@ Here I applied multiple strategies to get the **white** and **yellow** lane line
 
 I first tried to use **RGB** filtering by applying a *white* and *yellow* masks on the image and here were the results: 
 
-![RGB filtering](test_images_output\rgb_filtered_test_images.png "RGB")
+![RGB filtering](test_images_output/rgb_filtered_test_images.png "RGB")
 
 While this gives good results for some images it lacks to detect the lines for others like the images at the bottom which are mainly in the shade.
 
@@ -44,34 +44,34 @@ So instead of using the default **RGB** color space which didn't fit my data I w
 I used OpenCV's `cv2.cvtColor()` method to convert to each of the color spaces.
 
 Here are the results for the **HSV** color space:
-![HSV test images](test_images_output\hsv_test_images.png "HSV")
+![HSV test images](test_images_output/hsv_test_images.png "HSV")
 
 The **HSV** images clearly highlights the lane lines that are in the shaded area in the bottom 4 images something that our **RGB** filters lacked to accomplish;However, as you can see we lost all the lane lines in the top two images, the white lines aren't really visible especially the white dotted lines.
 
 Then I checkout the **HSL** images:
 
-![HSL test images](test_images_output\hsl_test_images.png "HSL")
+![HSL test images](test_images_output/hsl_test_images.png "HSL")
 
 
 All lane lines are visible even the ones in the shade which is what was missing from the **RGB** images after filtering, so I ended up choosing the **HSL** images as the color space encompassed the best of both worlds.
 
 Then I used a white/yellow mask to isolate the white and yellow colors in the image as show below:
 
-![white/yellow filtered test images](test_images_output\white_yellow_filtered_hsl_images.png "filtered HSL")
+![white/yellow filtered test images](test_images_output/white_yellow_filtered_hsl_images.png "filtered HSL")
 
 
 ## Gray Scaling and Smooting
 ---
 After that I applies **grayscaling** on the images as shown here: 
 
-![grayscaled test images](test_images_output\grayscaled_test_images.png "Grayscaled")
+![grayscaled test images](test_images_output/grayscaled_test_images.png "Grayscaled")
 
 
 Then I applied smoothing the grayscaled image using **Gaussian Blur** before I applied **Canny edge detection**, I found that a filter size of 11 does a nice job on the sample images. Though **Canny Edge Detection** applies smoothing internally, we can't change the filter size so prior smoothing is recommended as a good practice.
 
 Here are the results of the images after smoothing:
 
-![smoothed test images](test_images_output\smooth_test_images.png "Smooth")
+![smoothed test images](test_images_output/smooth_test_images.png "Smooth")
 
 
 ## Canny Edge Detection
@@ -79,7 +79,7 @@ Here are the results of the images after smoothing:
 
 Then I applied **Canny edge detection** with the thresholds of *50* to *150* which is *1:3 ratio* as recommended by **Canny**, and here are the results:
 
-![Canny test images](test_images_output\canny_test_images.png "Canny")
+![Canny test images](test_images_output/canny_test_images.png "Canny")
 
 
 ## Region of interest
@@ -88,7 +88,7 @@ Then I applied **Canny edge detection** with the thresholds of *50* to *150* whi
 After **selecting the colors, gray scaling, smoothing, and getting the image's Canny edges** I removed all the unimportant parts of the image like other lane lines, trees, sky, etc. to focus on the road ahead. I did this by applying a mask to only include pixels within a region of interest, and here is the results after applying it on the **Canny** images:
 
 
-![Region of interest test images](test_images_output\regionofinterest_test_images.png "Region of interest")
+![Region of interest test images](test_images_output/regionofinterest_test_images.png "Region of interest")
 
 
 As you can see I got a good *outlines* of the lane lines, the region of interest is as follows:
@@ -105,12 +105,12 @@ This gives a good representation of a road with its lane lines narrowing toward 
 I then proceeded to apply the **Hough transform** which resulted in the lines below:
 
 
-![Hough lines test images](test_images_output\hough_lines_test_images.png "Hough lines test images")
+![Hough lines test images](test_images_output/hough_lines_test_images.png "Hough lines test images")
 
 
 This result is pretty good for it show clear lines where the lane lines are, here are the lines drawn on top of the real images:
 
-![Hough test images](test_images_output\hough_test_images.png "Hough test images")
+![Hough test images](test_images_output/hough_test_images.png "Hough test images")
 
 ### So we're done, right? well not quite.
 
@@ -141,7 +141,7 @@ Then I made lines for the averaged lane lines from their **slopes** and **y-inte
 I decided to make `draw_lane_lines()` method to handle drawing the extrapolated lane lines instead of altering `draw_lines()` method for better code organization, so basically `draw_lane_lines()` is my modified `draw_lines()`.
 
 Here are the results of the `draw_lane_lines()` "darw_line()" method: 
-![Extrapolated test images](test_images_output\extrapolated_test_images.png "Extrapolated test images")
+![Extrapolated test images](test_images_output/extrapolated_test_images.png "Extrapolated test images")
 
 
 ## One more thing (Averaging video frames)
@@ -149,7 +149,7 @@ Here are the results of the `draw_lane_lines()` "darw_line()" method:
 ### Done?
 Actually still one more thing. After applying the pipeline on the first video **solidWhiteRight** the result seemed ok though the lines were a little jittery. 
 However, when applying it to the second video **solidYellowLeft** i noticed that at a certain second in the video the lane lines crossed each other for as you can see here: 
-![Crossed test images](test_images_output\crossed_lines.png "Crossed test images")
+![Crossed test images](test_images_output/crossed_lines.png "Crossed test images")
 
 Since videos mainly play 60 frames per second and each frame is an image, therefore I averaged the frames' lines to have a smoother and more consistent lane lines that didn't jitter and cross each other due to a couple of faulty frames.
 I chose to average across a **30** frame sample, this number gave me the most stable results.
