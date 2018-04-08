@@ -4,6 +4,14 @@
 
 #### The goal of this project is to identify lane lines on the road and draw them on the test images and videos. I'll be explaining how I managed to do that using the pipeline I created that employed techniques I learned in this course and others that I learned through the course of this project.
 
+
+# Youtube Video of the Pipeline in action:
+
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=https://youtu.be/yh8yB3maPrY
+" target="_blank"><img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
+
+
 # Reflection
 ---
 
