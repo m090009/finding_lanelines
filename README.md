@@ -7,11 +7,8 @@
 
 # Youtube Video of the Pipeline in action:
 ----
-<a href="http://www.youtube.com/watch?feature=player_embedded&v=https://youtu.be/yh8yB3maPrY
-" target="_blank"><img src="http://img.youtube.com/vi/https://youtu.be/yh8yB3maPrY/0.jpg" 
-alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>
 
-[![Pipeline in action](http://img.youtube.com/vi/https://youtu.be/yh8yB3maPrY/0.jpg)](http://www.youtube.com/watch?v=https://youtu.be/yh8yB3maPrY)
+[![Pipeline in action](http://img.youtube.com/vi/yh8yB3maPrY/0.jpg)](http://www.youtube.com/watch?v=yh8yB3maPrY)
 
 # Reflection
 ---
